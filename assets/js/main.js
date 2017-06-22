@@ -26,6 +26,9 @@ function funcchecker(input) {
     case "add":
       add(oprands);
       break;
+    case "comment":
+      comment(oprands);
+      break;
     case "print":
       print(oprands);
       break;

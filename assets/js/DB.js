@@ -23,7 +23,6 @@ function print(inputs) {
   options["thumbs_down"] = false;
   options["comments"] = false;
   oprands.forEach(function(e) {
-    console.log(e);
     if (e.startsWith("v")) {
       //verbose prints everything
       options["key"] = true;
@@ -85,24 +84,28 @@ function print(inputs) {
         addtolist(data.title, "b");
       }
       if (options["created"]) {
-        addtolist("Created: " + data.created);
+        addtolist("> Created: " + data.created);
       }
       if (options["modified"]) {
-        addtolist("Last modified: " + data.modified, "i");
+        addtolist("> Last modified: " + data.modified, "i");
       }
       if (options["description"]) {
-        addtolist(data.description);
+        addtolist("> " + data.description);
       }
       if (options["thumbs_up"]) {
-        addtolist("Thumbs up: " + data.thumbs_up);
+        addtolist("> Thumbs up: " + data.thumbs_up);
       }
       if (options["thumbs_down"]) {
-        addtolist("Thumbs down: " + data.thumbs_down);
+        addtolist("> Thumbs down: " + data.thumbs_down);
       }
       if (options["comments"]) {
-        (data.comments).forEach(function(c) {
-          addtolist(c[0] + " - " + c[1]);
-        })
+        if (data.comments.length > 0) {
+          addtolist("********** comments *********");
+          (data.comments).forEach(function(c) {
+            addtolist("-> " + c[1] + " - (" + c[0] + ")");
+          })
+          addtolist("****** end of comments ******")
+        }
       }
       addtolist("---------------------------");
     });
@@ -113,13 +116,12 @@ function add(inputs) {
   var oprands = inputs.split("-");
   var title = "";
   var description = "";
-  console.log(oprands);
   oprands.forEach(function(e) {
     if (e.startsWith("t")) {
-      title = e.substr(2);
+      $.trim(title = e.substr(2));
     }
     if (e.startsWith("d")) {
-      description = e.substr(2);
+      $.trim(description = e.substr(2));
     }
     if (e.startsWith("h")) {
       addtolist("add -t [title] -d [description]", "i");
@@ -136,7 +138,6 @@ function add(inputs) {
       "thumbs_up": 0,
       "thumbs_down": 0,
       "comments": []
-
     }),
     type: "POST",
     contentType: "application/json",
@@ -150,7 +151,22 @@ function add(inputs) {
   })
 }
 
-function comment(id, comment) {
+function comment(inputs) {
+  var oprands = inputs.split("-");
+  var id = "";
+  var comment = "";
+  oprands.forEach(function(e) {
+    if (e.startsWith("i")) {
+      id = $.trim(e.substr(2));
+    }
+    if (e.startsWith("c")) {
+      comment = $.trim(e.substr(2));
+    }
+    if (e.startsWith("h")) {
+      addtolist("comment -i [id] -c [comment]", "i");
+      return;
+    }
+  })
   $.ajax({
     url: urlbase + "/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
