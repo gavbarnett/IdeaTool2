@@ -36,6 +36,10 @@ function add_data(inputs) {
     if (e.startsWith("d")) {
       description = e.substr(2);
     }
+    if (e.startsWith("h")) {
+      addtolist("add -t [title] -d [description]", "i");
+      return;
+    }
   })
   $.ajax({
     url: urlbase + "?apiKey=" + myAPI,
