@@ -10,8 +10,8 @@ function checkKey(e) {
       var input = document.getElementById("input").value;
       document.getElementById("input").value = "";
       //console.log(input);
-      funcchecker(input);
       addtolist("User:- " + input);
+      funcchecker(input);
       break;
   }
 }
@@ -24,10 +24,10 @@ function funcchecker(input) {
   var oprands = input.substr(command[0].length + 1);
   switch (command[0]) {
     case "add":
-      add_data(oprands);
+      add(oprands);
       break;
     case "print":
-      get_data();
+      print(oprands);
       break;
   }
 }
