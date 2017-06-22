@@ -1,6 +1,6 @@
 //THIS IS SUPER INSECURE!!!!!
 var myAPI = "2tm9Xv3INUU5GH_HfSB2V_jelm89by6d"
-var d;
+
 //on load do:
 $(document).ready(function() {
   var title = Math.floor(Math.random() * 100);
@@ -25,6 +25,8 @@ function add_data(title, description) {
     url: "https://api.mlab.com/api/1/databases/ideadb/collections/test?apiKey=" + myAPI,
     data: JSON.stringify({
       "title": title,
+      "created": new Date(),
+      "modified": new Date(),
       "description": description,
       "thumbs_up": 0,
       "thumbs_down": 0,
@@ -46,11 +48,15 @@ function add_comment(id, comment) {
   $.ajax({
     url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
-    data["comments"][data["comments"].length] = comment;
+    var pos = data["comments"].length
+    data["comments"][pos] = [];
+    data["comments"][pos] = [new Date(), comment];
     $.ajax({
       url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
       data: JSON.stringify({
         "title": data["title"],
+        "created": data["created"],
+        "modified": data["modified"],
         "description": data["description"],
         "thumbs_up": data["thumbs_up"],
         "thumbs_down": data["thumbs_down"],
@@ -78,6 +84,8 @@ function thumbs_up(id) {
       url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
       data: JSON.stringify({
         "title": data["title"],
+        "created": data["created"],
+        "modified": data["modified"],
         "description": data["description"],
         "thumbs_up": data["thumbs_up"],
         "thumbs_down": data["thumbs_down"],
@@ -105,6 +113,8 @@ function thumbs_down(id) {
       url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
       data: JSON.stringify({
         "title": data["title"],
+        "created": data["created"],
+        "modified": data["modified"],
         "description": data["description"],
         "thumbs_up": data["thumbs_up"],
         "thumbs_down": data["thumbs_down"],
