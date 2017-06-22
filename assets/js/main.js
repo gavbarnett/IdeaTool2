@@ -31,10 +31,14 @@ function checkKey(e) {
 }
 
 function funcchecker(input) {
-  var parts = input.split(" ")
-  switch (parts[0]) {
+  /* The aim here is to follow the
+  UNIX standard command structure
+  https://www.le.ac.uk/oerresources/bdra/unix/page_17.htm*/
+  var command = input.split(" ", 1); //gets command
+  var oprands = input.substr(command[0].length + 1);
+  switch (command[0]) {
     case "add":
-      add_data(parts[1], parts[2]);
+      add_data(oprands);
       break;
     case "print":
       get_data();
@@ -76,7 +80,20 @@ function get_data() {
   })
 }
 
-function add_data(title, description) {
+function add_data(inputs) {
+  var oprands = inputs.split("-");
+  var title = "";
+  var description = "";
+  console.log(oprands);
+  oprands.forEach(function(e) {
+    console.log(e);
+    if (e.startsWith("t")) {
+      title = e.substr(2);
+    }
+    if (e.startsWith("d")) {
+      description = e.substr(2);
+    }
+  })
   $.ajax({
     url: urlbase + "?apiKey=" + myAPI,
     data: JSON.stringify({
@@ -92,11 +109,9 @@ function add_data(title, description) {
     contentType: "application/json",
     success: function(data) {
       //window.location.href = "index.html";
-      return ("done");
       console.log("done");
     },
     error: function(xhr, status, err) {
-      return (err);
       console.log(err);
     }
   })
