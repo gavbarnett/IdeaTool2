@@ -1,6 +1,6 @@
 //THIS IS SUPER INSECURE!!!!!
 var myAPI = "2tm9Xv3INUU5GH_HfSB2V_jelm89by6d"
-
+var urlbase = "https://api.mlab.com/api/1/databases/ideadb/collections/test"
 //on load do:
 $(document).ready(function() {
   var title = Math.floor(Math.random() * 100);
@@ -11,7 +11,7 @@ $(document).ready(function() {
 
 function get_data() {
   $.ajax({
-    url: "https://api.mlab.com/api/1/databases/ideadb/collections/test?apiKey=" + myAPI,
+    url: urlbase + "?apiKey=" + myAPI,
   }).done(function(data) {
     console.log(data);
     $.each(data, function(key, data) {
@@ -22,7 +22,7 @@ function get_data() {
 
 function add_data(title, description) {
   $.ajax({
-    url: "https://api.mlab.com/api/1/databases/ideadb/collections/test?apiKey=" + myAPI,
+    url: urlbase + "?apiKey=" + myAPI,
     data: JSON.stringify({
       "title": title,
       "created": new Date(),
@@ -46,11 +46,11 @@ function add_data(title, description) {
 
 function add_comment(id, comment) {
   $.ajax({
-    url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+    url: urlbase + "/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
     data["comments"][data["comments"].length] = [new Date(), comment];
     $.ajax({
-      url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+      url: urlbase + "/" + id + "?apiKey=" + myAPI,
       data: reformat(data),
       type: "PUT",
       contentType: "application/json",
@@ -67,11 +67,11 @@ function add_comment(id, comment) {
 
 function thumbs_up(id) {
   $.ajax({
-    url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+    url: urlbase + "/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
     data["thumbs_up"] += 1;
     $.ajax({
-      url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+      url: urlbase + "/" + id + "?apiKey=" + myAPI,
       data: reformat(data),
       type: "PUT",
       contentType: "application/json",
@@ -88,11 +88,11 @@ function thumbs_up(id) {
 
 function thumbs_down(id) {
   $.ajax({
-    url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+    url: urlbase + "/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
     data["thumbs_down"] += 1;
     $.ajax({
-      url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+      url: urlbase + "/" + id + "?apiKey=" + myAPI,
       data: reformat(data),
       type: "PUT",
       contentType: "application/json",
