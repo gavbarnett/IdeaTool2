@@ -1,23 +1,77 @@
 //THIS IS SUPER INSECURE!!!!!
 //but it's only a test, :-D
-var myAPI = "2tm9Xv3INUU5GH_HfSB2V_jelm89by6d"
+var myAPI = ""
 var urlbase = "https://api.mlab.com/api/1/databases/ideadb/collections/test"
 var objecttracker = [];
+document.onkeydown = checkKey;
+document.onclick = checkMouse;
+
 //on load do:
 $(document).ready(function() {
   var title = Math.floor(Math.random() * 100);
   var description = Math.floor(Math.random() * 1000);
+  console.log("Please enter myAPI value...");
+  addtolist("DB:- " + "Please enter myAPI value...");
   //add_data(title, description);
 });
 
+function checkKey(e) {
+  e = e || window.event;
+  switch (e.keyCode) {
+    case 13:
+      // enter pressed
+      e.preventDefault();
+      var input = document.getElementById("input").value;
+      document.getElementById("input").value = "";
+      //console.log(input);
+      funcchecker(input);
+      addtolist("User:- " + input);
+      break;
+  }
+}
 
-function get_data(draw) {
+function funcchecker(input) {
+  var parts = input.split(" ")
+  switch (parts[0]) {
+    case "add":
+      add_data(parts[1], parts[2]);
+      break;
+    case "print":
+      get_data();
+      break;
+  }
+}
+
+function checkMouse(e) {
+  document.getElementById("input").focus();
+}
+
+function addtolist(input, format) {
+  if (!format) {
+    format = "body";
+  }
+  var ul = document.getElementById("output");
+  var li = document.createElement("li");
+  var elm = document.createElement(format);
+  var txt = document.createTextNode(input);
+  elm.appendChild(txt);
+  li.appendChild(elm);
+  li.setAttribute("id", "element4"); // added line
+  ul.appendChild(li);
+  //alert(li.id);
+  //scrolling to end
+  document.getElementById("input").scrollIntoView(false);
+}
+
+function get_data() {
   $.ajax({
     url: urlbase + "?apiKey=" + myAPI,
   }).done(function(data) {
     console.log(data);
     $.each(data, function(key, data) {
       console.log(data.title, data._id.$oid);
+      addtolist(data.title, "b");
+      addtolist(".  " + data.description);
     });
   })
 }
@@ -38,9 +92,11 @@ function add_data(title, description) {
     contentType: "application/json",
     success: function(data) {
       //window.location.href = "index.html";
+      return ("done");
       console.log("done");
     },
     error: function(xhr, status, err) {
+      return (err);
       console.log(err);
     }
   })

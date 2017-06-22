@@ -3,7 +3,31 @@
 
 <head>
 	<title>Idea Thing</title>
+	<link rel="stylesheet" href="assets/css/main.css">
 </head>
+
+<body>
+	<div id="terminal">
+		<ul id="output">
+			<!--Empty unordered list-->
+		</ul>
+		<!--Below list place input box-->
+		<div class="cmd-panel">
+			<table class="cmd-table">
+				<tr>
+					<td class="cmd-prompt">
+						<!--space for in-line prompt, i.e. "user$>" normally-->
+						>>
+					</td>
+					<td class="cmd-input">
+						<!--user input area, this is a multiline text box-->
+						<textarea id="input" class="cmd-input-text" autofocus rows="5"></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
 
 <body>
 	<script type="text/javascript" src="assets/js/jquery.min.js"></script>
