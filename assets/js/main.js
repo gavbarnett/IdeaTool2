@@ -26,6 +26,8 @@ function add_data(title, description) {
     data: JSON.stringify({
       "title": title,
       "description": description,
+      "thumbs_up": 0,
+      "thumbs_down": 0,
       "comments": []
     }),
     type: "POST",
@@ -50,6 +52,62 @@ function add_comment(id, comment) {
       data: JSON.stringify({
         "title": data["title"],
         "description": data["description"],
+        "thumbs_up": data["thumbs_up"],
+        "thumbs_down": data["thumbs_down"],
+        "comments": data["comments"]
+      }),
+      type: "PUT",
+      contentType: "application/json",
+      success: function(data) {
+        //window.location.href = "index.html";
+        console.log("done");
+      },
+      error: function(xhr, status, err) {
+        console.log(err);
+      }
+    })
+  })
+}
+
+function thumbs_up(id) {
+  $.ajax({
+    url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+  }).done(function(data) {
+    data["thumbs_up"] += 1;
+    $.ajax({
+      url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+      data: JSON.stringify({
+        "title": data["title"],
+        "description": data["description"],
+        "thumbs_up": data["thumbs_up"],
+        "thumbs_down": data["thumbs_down"],
+        "comments": data["comments"]
+      }),
+      type: "PUT",
+      contentType: "application/json",
+      success: function(data) {
+        //window.location.href = "index.html";
+        console.log("done");
+      },
+      error: function(xhr, status, err) {
+        console.log(err);
+      }
+    })
+  })
+}
+
+function thumbs_down(id) {
+  $.ajax({
+    url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+  }).done(function(data) {
+    data["thumbs_down"] += 1;
+    $.ajax({
+      url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+      data: JSON.stringify({
+        "title": data["title"],
+        "description": data["description"],
+        "thumbs_up": data["thumbs_up"],
+        "thumbs_down": data["thumbs_down"],
         "comments": data["comments"]
       }),
       type: "PUT",
