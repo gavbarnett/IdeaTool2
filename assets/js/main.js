@@ -1,34 +1,66 @@
 //THIS IS SUPER INSECURE!!!!!
 var myAPI = "2tm9Xv3INUU5GH_HfSB2V_jelm89by6d"
-
+var d;
 //on load do:
 $(document).ready(function() {
+  var title = Math.floor(Math.random() * 100);
+  var description = Math.floor(Math.random() * 1000);
+  add_data(title, description);
+  get_data();
+});
 
+function get_data() {
+  $.ajax({
+    url: "https://api.mlab.com/api/1/databases/ideadb/collections/test?apiKey=" + myAPI,
+  }).done(function(data) {
+    console.log(data);
+    $.each(data, function(key, data) {
+      console.log(data.title, data._id.$oid);
+    });
+  })
+}
+
+function add_data(title, description) {
   $.ajax({
     url: "https://api.mlab.com/api/1/databases/ideadb/collections/test?apiKey=" + myAPI,
     data: JSON.stringify({
-      "testval1": 1,
-      "testval2": "two",
-      "testval3": "fart123"
+      "title": title,
+      "description": description,
+      "comments": []
     }),
     type: "POST",
     contentType: "application/json",
     success: function(data) {
       //window.location.href = "index.html";
       console.log("done");
-      getdata();
     },
     error: function(xhr, status, err) {
       console.log(err);
     }
-  });
-});
+  })
+}
 
-function getdata() {
+function add_comment(id, comment) {
   $.ajax({
-    url: "https://api.mlab.com/api/1/databases/ideadb/collections/test?apiKey=" + myAPI,
+    url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
-    console.log(data);
-    return (data);
+    data["comments"][data["comments"].length] = comment;
+    $.ajax({
+      url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
+      data: JSON.stringify({
+        "title": data["title"],
+        "description": data["description"],
+        "comments": data["comments"]
+      }),
+      type: "PUT",
+      contentType: "application/json",
+      success: function(data) {
+        //window.location.href = "index.html";
+        console.log("done");
+      },
+      error: function(xhr, status, err) {
+        console.log(err);
+      }
+    })
   })
 }
