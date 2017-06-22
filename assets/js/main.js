@@ -1,4 +1,5 @@
 //THIS IS SUPER INSECURE!!!!!
+//but it's only a test, :-D
 var myAPI = "2tm9Xv3INUU5GH_HfSB2V_jelm89by6d"
 var urlbase = "https://api.mlab.com/api/1/databases/ideadb/collections/test"
 //on load do:
