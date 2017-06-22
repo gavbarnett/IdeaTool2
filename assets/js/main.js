@@ -49,19 +49,7 @@ function add_comment(id, comment) {
     url: urlbase + "/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
     data["comments"][data["comments"].length] = [new Date(), comment];
-    $.ajax({
-      url: urlbase + "/" + id + "?apiKey=" + myAPI,
-      data: reformat(data),
-      type: "PUT",
-      contentType: "application/json",
-      success: function(data) {
-        //window.location.href = "index.html";
-        console.log("done");
-      },
-      error: function(xhr, status, err) {
-        console.log(err);
-      }
-    })
+    updateDB(id, data);
   })
 }
 
@@ -70,19 +58,7 @@ function thumbs_up(id) {
     url: urlbase + "/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
     data["thumbs_up"] += 1;
-    $.ajax({
-      url: urlbase + "/" + id + "?apiKey=" + myAPI,
-      data: reformat(data),
-      type: "PUT",
-      contentType: "application/json",
-      success: function(data) {
-        //window.location.href = "index.html";
-        console.log("done");
-      },
-      error: function(xhr, status, err) {
-        console.log(err);
-      }
-    })
+    updateDB(id, data);
   })
 }
 
@@ -91,30 +67,30 @@ function thumbs_down(id) {
     url: urlbase + "/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
     data["thumbs_down"] += 1;
-    $.ajax({
-      url: urlbase + "/" + id + "?apiKey=" + myAPI,
-      data: reformat(data),
-      type: "PUT",
-      contentType: "application/json",
-      success: function(data) {
-        //window.location.href = "index.html";
-        console.log("done");
-      },
-      error: function(xhr, status, err) {
-        console.log(err);
-      }
-    })
+    updateDB(id, data);
   })
 }
 
-function reformat(data) {
-  return JSON.stringify({
-    "title": data["title"],
-    "created": data["created"],
-    "modified": data["modified"],
-    "description": data["description"],
-    "thumbs_up": data["thumbs_up"],
-    "thumbs_down": data["thumbs_down"],
-    "comments": data["comments"]
+function updateDB(id, data) {
+  $.ajax({
+    url: urlbase + "/" + id + "?apiKey=" + myAPI,
+    data: JSON.stringify({
+      "title": data["title"],
+      "created": data["created"],
+      "modified": data["modified"],
+      "description": data["description"],
+      "thumbs_up": data["thumbs_up"],
+      "thumbs_down": data["thumbs_down"],
+      "comments": data["comments"]
+    }),
+    type: "PUT",
+    contentType: "application/json",
+    success: function(data) {
+      //window.location.href = "index.html";
+      console.log("done");
+    },
+    error: function(xhr, status, err) {
+      console.log(err);
+    }
   })
 }
