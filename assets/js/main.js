@@ -48,20 +48,10 @@ function add_comment(id, comment) {
   $.ajax({
     url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
-    var pos = data["comments"].length
-    data["comments"][pos] = [];
-    data["comments"][pos] = [new Date(), comment];
+    data["comments"][data["comments"].length] = [new Date(), comment];
     $.ajax({
       url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
-      data: JSON.stringify({
-        "title": data["title"],
-        "created": data["created"],
-        "modified": data["modified"],
-        "description": data["description"],
-        "thumbs_up": data["thumbs_up"],
-        "thumbs_down": data["thumbs_down"],
-        "comments": data["comments"]
-      }),
+      data: reformat(data),
       type: "PUT",
       contentType: "application/json",
       success: function(data) {
@@ -82,15 +72,7 @@ function thumbs_up(id) {
     data["thumbs_up"] += 1;
     $.ajax({
       url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
-      data: JSON.stringify({
-        "title": data["title"],
-        "created": data["created"],
-        "modified": data["modified"],
-        "description": data["description"],
-        "thumbs_up": data["thumbs_up"],
-        "thumbs_down": data["thumbs_down"],
-        "comments": data["comments"]
-      }),
+      data: reformat(data),
       type: "PUT",
       contentType: "application/json",
       success: function(data) {
@@ -111,15 +93,7 @@ function thumbs_down(id) {
     data["thumbs_down"] += 1;
     $.ajax({
       url: "https://api.mlab.com/api/1/databases/ideadb/collections/test/" + id + "?apiKey=" + myAPI,
-      data: JSON.stringify({
-        "title": data["title"],
-        "created": data["created"],
-        "modified": data["modified"],
-        "description": data["description"],
-        "thumbs_up": data["thumbs_up"],
-        "thumbs_down": data["thumbs_down"],
-        "comments": data["comments"]
-      }),
+      data: reformat(data),
       type: "PUT",
       contentType: "application/json",
       success: function(data) {
@@ -130,5 +104,17 @@ function thumbs_down(id) {
         console.log(err);
       }
     })
+  })
+}
+
+function reformat(data) {
+  return JSON.stringify({
+    "title": data["title"],
+    "created": data["created"],
+    "modified": data["modified"],
+    "description": data["description"],
+    "thumbs_up": data["thumbs_up"],
+    "thumbs_down": data["thumbs_down"],
+    "comments": data["comments"]
   })
 }
