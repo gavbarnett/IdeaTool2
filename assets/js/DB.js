@@ -14,6 +14,7 @@ $(document).ready(function() {
 function print(inputs) {
   var oprands = inputs.split("-");
   var options = [];
+  var stopfunction = false;
   options["key"] = false;
   options["title"] = true;
   options["created"] = false;
@@ -68,9 +69,12 @@ function print(inputs) {
       addtolist("-p thumbs_up", "i");
       addtolist("-n thumbs_down", "i");
       addtolist("-c comments", "i");
-      return;
+      stopfunction = true;
     }
   })
+  if (stopfunction == true) {
+    return;
+  }
   $.ajax({
     url: urlbase + "?apiKey=" + myAPI,
   }).done(function(data) {
@@ -116,6 +120,7 @@ function add(inputs) {
   var oprands = inputs.split("-");
   var title = "";
   var description = "";
+  var stopfunction = false;
   oprands.forEach(function(e) {
     if (e.startsWith("t")) {
       $.trim(title = e.substr(2));
@@ -125,9 +130,13 @@ function add(inputs) {
     }
     if (e.startsWith("h")) {
       addtolist("add -t [title] -d [description]", "i");
+      stopfunction = true;
       return;
     }
   })
+  if (stopfunction) {
+    return;
+  }
   $.ajax({
     url: urlbase + "?apiKey=" + myAPI,
     data: JSON.stringify({
@@ -155,6 +164,7 @@ function comment(inputs) {
   var oprands = inputs.split("-");
   var id = "";
   var comment = "";
+  var stopfunction = false;
   oprands.forEach(function(e) {
     if (e.startsWith("i")) {
       id = $.trim(e.substr(2));
@@ -164,9 +174,13 @@ function comment(inputs) {
     }
     if (e.startsWith("h")) {
       addtolist("comment -i [id] -c [comment]", "i");
+      stopfunction = true;
       return;
     }
   })
+  if (stopfunction) {
+    return;
+  }
   $.ajax({
     url: urlbase + "/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
@@ -176,6 +190,7 @@ function comment(inputs) {
 }
 
 function thumbs_up(id) {
+  var stopfunction = false;
   $.ajax({
     url: urlbase + "/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
@@ -185,6 +200,7 @@ function thumbs_up(id) {
 }
 
 function thumbs_down(id) {
+  var stopfunction = false;
   $.ajax({
     url: urlbase + "/" + id + "?apiKey=" + myAPI,
   }).done(function(data) {
